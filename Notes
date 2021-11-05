@@ -1,0 +1,47 @@
+Step 1: Browse and install the Entity framework.
+
+
+Step 2: Create Domain Classes
+
+  public class Student  
+    {  
+        public int StudentID { get; set; }  
+        public string Name { get; set; }  
+        public string Address { get; set; }  
+        public string Mobile { get; set; }  
+    }
+
+Step 3: Add DbContext Class
+
+
+    public class StudentDbContext: DbContext
+    {
+	//In default Constructor passing ConnectionString Name as a parameter in base which call DbContext Constructor
+       public StudentDbContext(): base("StudentDbContext")
+        {
+
+        }
+        public DbSet<Student> Students { get; set; }
+    }
+
+Step 4: Add ConnectionString in Web.Config [after <configSections>]
+(Put the connectionStrings element is after the configSections element.)
+
+<connectionStrings>
+    <add name="StudentDbContext" connectionString="Data Source=DESKTOP-G4J5O5V;Initial Catalog=PeopleDb;integrated security=SSPI" providerName="System.Data.SqlClient" />
+  </connectionStrings>
+
+
+Step 5[Optional]: open Global.asax file and Set Database Initializer
+
+ Database.SetInitializer<StudentDbContext>
+                (new DropCreateDatabaseIfModelChanges<StudentDbContext>());
+
+Step 6: Do Migration in Nuget Package manager Console
+
+PM> Enable-Migrations
+
+PM> Add-migration Initial
+
+PM> Update-database
+
